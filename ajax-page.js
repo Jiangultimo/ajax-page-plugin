@@ -113,7 +113,7 @@ var ajaxPage = (function() {
         getUserList: function(_curPage,_ajaxLink,_method) {
             var self = this;
             $.ajax({
-                url: _ajaxLink
+                url: _ajaxLink,
                 data: { page: _curPage },
                 type: _method,
                 dataType: 'JSON',
