@@ -120,7 +120,7 @@ var ajaxPage = (function() {
                 success: function(json) {
                     if (json.state == 1) {
                         self.obj.target.html('');
-                        getTpl.init(json, self.tpl ,self.obj.target, self.obj.fun, _curPage); //渲染模板
+                        getTpl.init(json, self.obj.tpl ,self.obj.target, self.obj.fun, _curPage); //渲染模板
                     }
                 },
                 error: function(err) {
