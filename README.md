@@ -1,6 +1,6 @@
 用户ajax分页，分页中有省略号
 
-- 使用方法：
+- 使用方法：page模板以`$('#ajaxPage')`为目标dom
 ```javascript
 ajaxPage.init({
     ajaxLink:'',//ajax request url
