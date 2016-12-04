@@ -14,7 +14,7 @@ var getTpl = (function() {
             if (_data.data.length !== 0) {
                 data = _data.data;
             } else {
-                _data.data= '暂无数据';
+                _data.data = '暂无数据';
             }
 
             for (var a in data) {
@@ -42,7 +42,7 @@ var listPage = (function() {
         init: function(num, total) {
             $('#ajaxPage').find('ul').html('');
             var self = this;
-            var totalPage =  total
+            var totalPage = total
             var htmlStr = '';
             switch (true) {
                 case (totalPage <= 5):
@@ -56,7 +56,7 @@ var listPage = (function() {
                     }
                     htmlStr += middle; //先拼装省略号部分的页码模板
 
-            htmlStr += self.getLiTpl(totalPage);
+                    htmlStr += self.getLiTpl(totalPage);
                     break;
                 case ((num - 1) >= 4 && (totalPage - num) >= 4):
                     htmlStr += self.getLiTpl(1);
@@ -65,7 +65,7 @@ var listPage = (function() {
                         htmlStr += self.getLiTpl(i);
                     }
                     htmlStr += middle; //先拼装省略号部分的页码模板getLiTpl
-            htmlStr += self.getLiTpl(totalPage);
+                    htmlStr += self.getLiTpl(totalPage);
                     break;
                 case ((totalPage - num) < 4):
                     htmlStr += self.getLiTpl(1);
@@ -73,7 +73,7 @@ var listPage = (function() {
                     for (var i = 18, len = totalPage; i < len; i++) {
                         htmlStr += self.getLiTpl(i);
                     }
-            htmlStr += self.getLiTpl(totalPage);
+                    htmlStr += self.getLiTpl(totalPage);
                     break;
                 default:
                     break;
@@ -109,15 +109,15 @@ var ajaxPage = (function() {
             var self = this;
             self.obj = _obj;
             $(document).on('click', '#ajaxPage ul li a', function() {
-                if($(this).hasClass('active')){//如果点击对象含有样式active则什么也不发生
+                if ($(this).hasClass('active')) { //如果点击对象含有样式active则什么也不发生
                     return false;
-                }else{
-                    self.getUserList(Number($(this).text()),self.obj.ajaxLink,self.obj.method);
+                } else {
+                    self.getUserList(Number($(this).text()), self.obj.ajaxLink, self.obj.method);
                 }
             })
-            self.getUserList(1,self.obj.ajaxLink,self.obj.method);
+            self.getUserList(1, self.obj.ajaxLink, self.obj.method);
         },
-        getUserList: function(_curPage,_ajaxLink,_method) {
+        getUserList: function(_curPage, _ajaxLink, _method) {
             var self = this;
             $.ajax({
                 url: _ajaxLink,
@@ -127,7 +127,7 @@ var ajaxPage = (function() {
                 success: function(json) {
                     if (json.state == 1) {
                         self.obj.target.html('');
-                        getTpl.init(json, self.obj.tpl ,self.obj.target, self.obj.fun, _curPage); //渲染模板
+                        getTpl.init(json, self.obj.tpl, self.obj.target, self.obj.fun, _curPage); //渲染模板
                     }
                 },
                 error: function(err) {
