@@ -13,18 +13,18 @@ var getTpl = (function() {
                 data;
             if (_data.data.length !== 0) {
                 data = _data.data;
+                for (var a in data) {
+                    res += _tpl.replace(reg, function(word) {
+                        var key = word.substr(1, word.length - 2);
+                        return data[a][key];
+                    });
+                }
             } else {
-                _data.data= '暂无数据';
+                _data.data = '暂无数据';
             }
 
-            for (var a in data) {
-                res += _tpl.replace(reg, function(word) {
-                    var key = word.substr(1, word.length - 2);
-                    return data[a][key];
-                });
-            }
             _target.append(res);
-            return (function() { //模板渲染完成后，来通过时间来判断是否过期或者生效
+            return (function() { //模板渲染完成后，调用回到函数
                 _fun(data);
                 listPage.init(_page, _data.totalPage);
             }());
@@ -42,7 +42,7 @@ var listPage = (function() {
         init: function(num, total) {
             $('#ajaxPage').find('ul').html('');
             var self = this;
-            var totalPage =  total
+            var totalPage = total
             var htmlStr = '';
             switch (true) {
                 case (totalPage <= 5):
@@ -106,21 +106,24 @@ var ajaxPage = (function() {
             var self = this;
             self.obj = _obj;
             $(document).on('click', '#ajaxPage ul li a', function() {
-                self.getUserList(Number($(this).text()),self.obj.ajaxLink,self.obj.method);
+                var curPage = $(this).attr('href').replace(/#/g, '');
+                self.getUserList(Number(curPage), self.obj.ajaxLink, self.obj.method);
             })
-            self.getUserList(1,self.obj.ajaxLink,self.obj.method);
+            self.getUserList(1, self.obj.ajaxLink, self.obj.method);
         },
-        getUserList: function(_curPage,_ajaxLink,_method) {
+        getUserList: function(_curPage, _ajaxLink, _method) {
             var self = this;
             $.ajax({
                 url: _ajaxLink
-                data: { page: _curPage },
+                data: {
+                    page: _curPage
+                },
                 type: _method,
                 dataType: 'JSON',
                 success: function(json) {
                     if (json.state == 1) {
                         self.obj.target.html('');
-                        getTpl.init(json, self.tpl ,self.obj.target, self.obj.fun, _curPage); //渲染模板
+                        getTpl.init(json, self.tpl, self.obj.target, self.obj.fun, _curPage); //渲染模板
                     }
                 },
                 error: function(err) {
