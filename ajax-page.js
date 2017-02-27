@@ -55,6 +55,8 @@ var listPage = (function() {
                         htmlStr += self.getLiTpl(i);
                     }
                     htmlStr += middle; //先拼装省略号部分的页码模板
+
+                    htmlStr += self.getLiTpl(totalPage);
                     break;
                 case ((num - 1) >= 4 && (totalPage - num) >= 4):
                     htmlStr += self.getLiTpl(1);
@@ -63,6 +65,7 @@ var listPage = (function() {
                         htmlStr += self.getLiTpl(i);
                     }
                     htmlStr += middle; //先拼装省略号部分的页码模板getLiTpl
+                    htmlStr += self.getLiTpl(totalPage);
                     break;
                 case ((totalPage - num) < 4):
                     htmlStr += self.getLiTpl(1);
@@ -70,11 +73,11 @@ var listPage = (function() {
                     for (var i = 18, len = totalPage; i < len; i++) {
                         htmlStr += self.getLiTpl(i);
                     }
+                    htmlStr += self.getLiTpl(totalPage);
                     break;
                 default:
                     break;
             }
-            htmlStr += self.getLiTpl(totalPage);
             $('#ajaxPage').find('ul').append(htmlStr);
 
             $('#ajaxPage').find('ul li').each(function() {
@@ -107,7 +110,11 @@ var ajaxPage = (function() {
             self.obj = _obj;
             $(document).on('click', '#ajaxPage ul li a', function() {
                 var curPage = $(this).attr('href').replace(/#/g, '');
-                self.getUserList(Number(curPage), self.obj.ajaxLink, self.obj.method);
+                if ($(this).hasClass('active')) { //如果点击对象含有样式active则什么也不发生
+                    return false;
+                } else {
+                    self.getUserList(Number(curPage), self.obj.ajaxLink, self.obj.method);
+                }
             })
             self.getUserList(1, self.obj.ajaxLink, self.obj.method);
         },
@@ -123,7 +130,7 @@ var ajaxPage = (function() {
                 success: function(json) {
                     if (json.state == 1) {
                         self.obj.target.html('');
-                        getTpl.init(json, self.tpl, self.obj.target, self.obj.fun, _curPage); //渲染模板
+                        getTpl.init(json, self.obj.tpl, self.obj.target, self.obj.fun, _curPage); //渲染模板
                     }
                 },
                 error: function(err) {
