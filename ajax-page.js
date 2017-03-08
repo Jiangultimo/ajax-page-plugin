@@ -95,6 +95,7 @@ var listPage = (function() {
 }());
 
 var ajaxPage = (function() {
+    var count = 0;
     return {
         /*
          * @obj 传入必要参数
@@ -108,23 +109,24 @@ var ajaxPage = (function() {
         init: function(_obj) {
             var self = this;
             self.obj = _obj;
-            $(document).on('click', '#ajaxPage ul li a', function() {
-                var curPage = $(this).attr('href').replace(/#/g, '');
-                if ($(this).hasClass('active')) { //如果点击对象含有样式active则什么也不发生
-                    return false;
-                } else {
-                    self.getUserList(Number(curPage), self.obj.ajaxLink, self.obj.method);
-                }
-            })
-            self.getUserList(1, self.obj.ajaxLink, self.obj.method);
+            if(self.bindCount() == 1) {
+                $(document).on('click', '#ajaxPage ul li a', function() {
+                    var curPage = $(this).attr('href').replace(/#/g, '');
+                    if ($(this).hasClass('active')) { //如果点击对象含有样式active则什么也不发生
+                        return false;
+                    } else {
+                        self.getUserList(self.obj.data, Number(curPage), self.obj.ajaxLink, self.obj.method);
+                    }
+                });
+            }
+            self.getUserList(null, 1, self.obj.ajaxLink, self.obj.method);
         },
-        getUserList: function(_curPage, _ajaxLink, _method) {
+        getUserList: function(_data, _curPage, _ajaxLink, _method) {
             var self = this;
+            var data = _data || {};
             $.ajax({
                 url: _ajaxLink
-                data: {
-                    page: _curPage
-                },
+                data: _data,
                 type: _method,
                 dataType: 'JSON',
                 success: function(json) {
@@ -137,6 +139,10 @@ var ajaxPage = (function() {
                     console.log(err);
                 }
             });
+        },
+        bindCheck:function() {
+            count++;
+            return count;
         }
     }
 }());
